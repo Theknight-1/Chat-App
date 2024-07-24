@@ -5,20 +5,21 @@ import { redirect } from "next/navigation";
 
 interface InviteCodeProps {
   params: {
-    InviteCode: string;
+    inviteCode: string;
   };
 }
 const InviteCodePage = async ({ params }: InviteCodeProps) => {
   const profile = await currentProfile();
+
   if (!profile) {
     return <RedirectToSignIn />;
   }
-  if (!params.InviteCode) {
+  if (!params.inviteCode) {
     return redirect("/");
   }
   const existingServer = await db.server.findFirst({
     where: {
-      inviteCode: params.InviteCode,
+      inviteCode: params.inviteCode,
       members: {
         some: {
           profileId: profile.id,
@@ -26,12 +27,14 @@ const InviteCodePage = async ({ params }: InviteCodeProps) => {
       },
     },
   });
+ 
+
   if (existingServer) {
     return redirect(`/server/${existingServer.id}`);
   }
   const server = await db.server.update({
     where: {
-      inviteCode: params.InviteCode,
+      inviteCode: params.inviteCode,
     },
     data: {
       members: {
@@ -40,7 +43,7 @@ const InviteCodePage = async ({ params }: InviteCodeProps) => {
     },
   });
   if (server) {
-    return redirect(`s/erver/${server.id}`);
+    return redirect(`/server/${server.id}`);
   }
   return null;
 };

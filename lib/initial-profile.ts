@@ -7,22 +7,23 @@ export const initialProfile = async () => {
   if (!user) {
     redirect("/sign-in"); // Adjust the sign-in route if it's different
   }
+  console.log(user);
 
   const profile = await db.profile.findUnique({
-    where :{
-        userId : user.id
-    }
-  })
-  if(profile){
+    where: {
+      userId: user.id,
+    },
+  });
+  if (profile) {
     return profile;
   }
   const newProfile = await db.profile.create({
-    data : {
-        userId : user.id,
-        name : `${user.firstName} ${user.lastName}`,
-        imageUrl : user.imageUrl,
-        email : user.emailAddresses[0].emailAddress
-    }
-  })
+    data: {
+      userId: user.id,
+      name: `${user.firstName} ${user.lastName}`,
+      imageUrl: user.imageUrl,
+      email: user.emailAddresses[0].emailAddress,
+    },
+  });
   return newProfile;
 };

@@ -5,7 +5,7 @@ import InitialModal from "@/components/modals/initial-modal";
 
 const SetupPage = async () => {
   const profile = await initialProfile();
-  
+
   const server = await db.server.findFirst({
     where: {
       members: {
@@ -15,15 +15,13 @@ const SetupPage = async () => {
       },
     },
   });
+  console.log(server);
 
-  if(server){
-    return redirect(`/servers/${server.id}`)
+  if (server) {
+    return redirect(`/server/${server.id}`);
   }
- 
 
-  return (
-    <InitialModal/>
-  )
+  return <InitialModal />;
 };
 
 export default SetupPage;
