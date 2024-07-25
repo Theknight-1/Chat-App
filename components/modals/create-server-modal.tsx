@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,9 +49,16 @@ const CreateServerModal = () => {
     },
   });
 
-  const isLoading = form.formState.isSubmitted;
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      form.reset();
+    }
+  }, [isModalOpen, form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
     try {
       await axios.post(`/api/servers`, values);
       form.reset();
@@ -59,6 +66,8 @@ const CreateServerModal = () => {
       onClose();
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -95,6 +104,7 @@ const CreateServerModal = () => {
                           onChange={field.onChange}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -110,7 +120,7 @@ const CreateServerModal = () => {
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className=" bg-zinc-500/50 border-0 outline-none text-black placeholder:text-black focus-visible:ring-offset-0"
+                        className="bg-zinc-500/50 border-0 outline-none text-black placeholder:text-black focus-visible:ring-offset-0"
                         placeholder="Enter Server Name"
                         {...field}
                       />
@@ -124,7 +134,7 @@ const CreateServerModal = () => {
               <Button
                 variant="primary"
                 type="submit"
-                className=" px-6 py-3 bg-zinc-600 text-white"
+                className="px-6 py-3 bg-zinc-600 text-white"
                 disabled={isLoading}
               >
                 {isLoading ? "Submitting..." : "Create"}
