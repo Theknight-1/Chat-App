@@ -1,7 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -10,6 +10,7 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
+import { useParams, useRouter } from "next/navigation";
 
 interface ServersearchProps {
   data: {
@@ -27,6 +28,46 @@ interface ServersearchProps {
 
 export const ServerSearch = ({ data }: ServersearchProps) => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const params = useParams();
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
+
+  const onClick = ({
+    id,
+    type,
+  }: {
+    id: string;
+    type: "channel" | "member";
+  }) => {
+    console.log("onClick called with:", { id, type });
+    console.log("params:", params);
+    setOpen(false);
+    if (type === "member") {
+      console.log(
+        "Navigating to member conversation:",
+        `/servers/${params?.serverId}/conversations/${id}`
+      );
+      return router.push(`/servers/${params?.serverId}/conversations/${id}`);
+    }
+    if (type === "channel") {
+      console.log(
+        "Navigating to channel:",
+        `/servers/${params?.serverId}/channels/${id}`
+      );
+      return router.push(`/server/${params?.serverId}/channels/${id}`);
+    }
+  };
+
   return (
     <>
       <button
@@ -51,7 +92,10 @@ export const ServerSearch = ({ data }: ServersearchProps) => {
               <CommandGroup key={label} heading={label}>
                 {data?.map(({ id, icon, name }) => {
                   return (
-                    <CommandItem key={id}>
+                    <CommandItem
+                      key={id}
+                      onSelect={() => onClick({ id, type })}
+                    >
                       {icon} <span>{name}</span>
                     </CommandItem>
                   );
