@@ -15,15 +15,19 @@ interface ActionToolkitProp {
   align?: "start" | "center" | "end";
 }
 
-
-
 const ActionToolkit = ({ label, children, side, align }: ActionToolkitProp) => {
   return (
     <TooltipProvider>
       <Tooltip delayDuration={50}>
-        <TooltipTrigger asChild className="shadow-2xl">{children}</TooltipTrigger>
-        <TooltipContent side={side} align={align}>
-          <p className="font-semibold text-sm capitalize">
+        <TooltipTrigger asChild className="shadow-2xl">
+          {children}
+        </TooltipTrigger>
+        <TooltipContent
+          side={side}
+          align={align}
+          className="dark:bg-white dark:text-black bg-black text-white"
+        >
+          <p className="font-semibold text-sm capitalize ">
             {label.toLocaleLowerCase()}
           </p>
         </TooltipContent>
