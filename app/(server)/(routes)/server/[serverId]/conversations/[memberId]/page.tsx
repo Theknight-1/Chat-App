@@ -44,7 +44,7 @@ const MemberId = async ({ params, searchParams }: MemberIdPageProps) => {
   );
 
   if (!conversation) {
-    return redirect(`/servers/${params.serverId}`);
+    return redirect(`/server/${params.serverId}`);
   }
 
   const { memberOne, memberTwo } = conversation;

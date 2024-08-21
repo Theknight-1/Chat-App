@@ -55,14 +55,14 @@ export const ServerSearch = ({ data }: ServersearchProps) => {
     if (type === "member") {
       console.log(
         "Navigating to member conversation:",
-        `/servers/${params?.serverId}/conversations/${id}`
+        `/server/${params?.serverId}/conversations/${id}`
       );
-      return router.push(`/servers/${params?.serverId}/conversations/${id}`);
+      return router.push(`/server/${params?.serverId}/conversations/${id}`);
     }
     if (type === "channel") {
       console.log(
         "Navigating to channel:",
-        `/servers/${params?.serverId}/channels/${id}`
+        `/server/${params?.serverId}/channels/${id}`
       );
       return router.push(`/server/${params?.serverId}/channels/${id}`);
     }
