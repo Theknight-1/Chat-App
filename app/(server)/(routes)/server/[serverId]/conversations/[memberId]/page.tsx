@@ -6,6 +6,9 @@ import { RedirectToSignIn } from "@clerk/nextjs";
 
 import { redirect } from "next/navigation";
 import { ChatHeader } from "@/components/chat/Chat-header";
+import { ChatMessages } from "@/components/chat/chat-messages";
+import { ChatInput } from "@/components/chat/chat-input";
+import { MediaRoom } from "@/components/media-room";
 
 interface MemberIdPageProps {
   params: {
@@ -60,7 +63,7 @@ const MemberId = async ({ params, searchParams }: MemberIdPageProps) => {
         serverId={params.serverId}
         type="conversation"
       />
-      {/* {searchParams.video && (
+      {searchParams.video && (
         <MediaRoom chatId={conversation.id} video={true} audio={true} />
       )}
       {!searchParams.video && (
@@ -87,7 +90,7 @@ const MemberId = async ({ params, searchParams }: MemberIdPageProps) => {
             }}
           />
         </>
-      )} */}
+      )}
     </div>
   );
 };
