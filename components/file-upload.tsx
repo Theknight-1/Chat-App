@@ -5,7 +5,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { UploadDropzone } from "@/lib/uploadthing";
-import "@uploadthing/react/styles.css";
+
 
 const StyledUploadDropzone = styled(UploadDropzone)`
   border: 2px dashed indigo;

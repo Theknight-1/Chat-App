@@ -51,6 +51,7 @@ const InitialModal = () => {
   });
 
   const isLoading = form.formState.isSubmitted;
+  const imageUrl = form.watch("imageUrl");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -81,7 +82,7 @@ const InitialModal = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-6 px-6">
-              <div className="flex items-center justify-center text-center">
+              <div className="flex flex-col items-center justify-center text-center">
                 <FormField
                   control={form.control}
                   name="imageUrl"
@@ -97,6 +98,11 @@ const InitialModal = () => {
                     </FormItem>
                   )}
                 ></FormField>
+                {!imageUrl && (
+                  <p className="text-xs font-semibold text-zinc-600 dark:text-zink-300">
+                    Please click on upload after chossing file.
+                  </p>
+                )}
               </div>
               <FormField
                 name="name"
@@ -123,8 +129,12 @@ const InitialModal = () => {
               <Button
                 variant="primary"
                 type="submit"
-                className=" px-6 py-3 bg-zinc-600 text-white"
-                disabled={isLoading}
+                className={`px-6 py-3 bg-zinc-600 text-white ${
+                  isLoading || !imageUrl
+                    ? "cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+                disabled={isLoading || !imageUrl}
               >
                 {isLoading ? "Submitting..." : "Create"}
               </Button>
