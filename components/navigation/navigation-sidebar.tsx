@@ -8,6 +8,9 @@ import { ScrollArea } from "../ui/scroll-area";
 import { NavigationItem } from "./navigation-item";
 import { ModeToggle } from "../mode-toggle";
 import { UserButton } from "@clerk/nextjs";
+import ActionToolkit from "../action-toolkit";
+import { Plus } from "lucide-react";
+import DiscoverButton from "../discover-more/discover-button";
 
 const NavigationSidebar = async () => {
   const profile = await currentProfile();
@@ -24,9 +27,9 @@ const NavigationSidebar = async () => {
     },
   });
   return (
-    <div className="w-full h-full bg-[#515255] dark:bg-[#1E1F22] text-white flex flex-col items-center py-4 space-y-4 ">
+    <div className="w-full h-full bg-[#515255] dark:bg-[#1E1F22] text-white flex flex-col items-center py-4 space-y-3 ">
       <NavigationAction />
-      <Separator className="h-[2px] bg-zink-300 dark:bg-zinc-700 rounded-md w-10 mx-auto" />
+      <Separator className="h-[2px] bg-zink-300 dark:bg-zinc-700 rounded-md w-8 mx-auto" />
       <ScrollArea className="flex-1 w-full">
         {servers.map((server) => {
           return (
@@ -39,6 +42,7 @@ const NavigationSidebar = async () => {
             </div>
           );
         })}
+        <DiscoverButton />
       </ScrollArea>
       <div className="pb-3 mt-auto flex items-center flex-col gap-y-4">
         <ModeToggle />

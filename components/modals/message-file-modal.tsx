@@ -98,11 +98,11 @@ const MessageFileModal = () => {
                 ></FormField>
               </div>
             </div>
-            <DialogFooter className="bg-gray-100 pb-3 flex justify-center">
+            <DialogFooter className="bg-gray-100 p-2">
               <Button
                 variant="primary"
                 type="submit"
-                className=" w-[60%] px-6 py-3 bg-zinc-600 text-white"
+                className=" w-[50%] mx-auto px-6 py-3 bg-zinc-600 text-white"
                 disabled={isLoading}
               >
                 {isLoading ? "Sending..." : "Send"}

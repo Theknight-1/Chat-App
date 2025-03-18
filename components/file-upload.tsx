@@ -65,7 +65,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
               src={uploadedUrl}
               sizes="h-full w-full"
               alt="upload"
-              className="object-contain"
+              className="object-contain "
             />
             <button
               onClick={() => setUploadedUrl(undefined)}
