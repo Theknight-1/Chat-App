@@ -20,5 +20,7 @@ export const SetupPage = async () => {
     return redirect(`/server/${server.id}`);
   }
 
-  return <InitialModal />;
+  return redirect(`/discovery`)
+
+  // return <InitialModal />;
 };

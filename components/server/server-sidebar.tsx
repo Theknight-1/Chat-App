@@ -15,6 +15,7 @@ import ServerHeader from "./server-header";
 import { ServerSection } from "./server-section";
 import ServerChannel from "./server-channel";
 import { ServerMembers } from "./server-member";
+import UserBar from "../user/user-bar";
 
 interface ServerSidebarProps {
   serverId: string;
@@ -38,7 +39,7 @@ const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
   if (!profile) {
     return redirect("/");
   }
-  
+
   const server = await db.server.findUnique({
     where: {
       id: serverId,
@@ -216,6 +217,7 @@ const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
           </div>
         )}
       </ScrollArea>
+      <UserBar />
     </div>
   );
 };
