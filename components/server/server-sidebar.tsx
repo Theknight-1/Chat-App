@@ -15,7 +15,7 @@ import ServerHeader from "./server-header";
 import { ServerSection } from "./server-section";
 import ServerChannel from "./server-channel";
 import { ServerMembers } from "./server-member";
-import UserBar from "../user/user-bar";
+import UserBar from "../user/index";
 
 interface ServerSidebarProps {
   serverId: string;
