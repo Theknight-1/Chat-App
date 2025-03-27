@@ -17,9 +17,9 @@ const UserAvatar = ({ src, className, greenDotClassName, show = false }: UserAva
       </Avatar>
       {show &&
         (isConnected ?
-          <div className={cn("absolute bottom-1 right-1 w-2  h-2 rounded-full bg-green-500", greenDotClassName)} />
+          <div className={cn("absolute bottom-1 overflow-hidden right-1 w-2 z-10 h-2 rounded-full bg-green-500", greenDotClassName)} />
           :
-          <div className={cn("absolute bottom-1 right-1 w-2  h-2 rounded-full bg-yellow-500", greenDotClassName)} />)
+          <div className={cn("absolute bottom-1 right-1 w-2 overflow-hidden z-10 h-2 rounded-full bg-yellow-500", greenDotClassName)} />)
       }
     </div>
   );

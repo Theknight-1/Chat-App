@@ -2,8 +2,8 @@ import React from 'react';
 import { Separator } from '../ui/separator';
 import DiscoverSidebarItems from './discover-siderbar-item';
 import { LayoutGrid, Server, BrainCog } from 'lucide-react';
-import UserBar from '../user/user-bar';
 import { ScrollArea } from '../ui/scroll-area';
+import UserBar from "../user/index"
 
 interface ItemProp {
     title: string;
@@ -24,7 +24,7 @@ const DiscoverSidebar = () => {
                 <Separator />
                 <DiscoverSidebarItems items={Items} />
             </ScrollArea>
-            <UserBar  />
+            <UserBar />
         </div>
     );
 };

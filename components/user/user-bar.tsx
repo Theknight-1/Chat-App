@@ -7,25 +7,38 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuPor
 import { Pencil, Settings } from 'lucide-react';
 import { DropdownMenuGroup, DropdownMenuItem } from '../ui/dropdown-menu';
 import { Separator } from '../ui/separator';
+import { useModal } from '@/hooks/use-modal-store';
 
 interface UserBarClientProps {
-    profile: {
-        name?: string;
-        email?: string;
-        imageUrl?: string;
-    } | null;
+    profile?: {
+        id: string;
+        userId: string;
+        name: string;
+        imageUrl: string;
+        email: string;
+        createdAt: Date;
+        updatedAt: Date;
+    };
 }
 
 const UserBarClient = ({ profile }: UserBarClientProps) => {
+    const { onOpen, isOpen, type } = useModal();
+    const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
+    const isModalOpen = isOpen && type === "userDetails";
+
+    const handleEditProfileClick = () => {
+        setIsDropdownOpen(false);
+        onOpen("userDetails", { profile });
+    };
 
     return (
         <>
             <div className="dark:bg-zinc-900/50 p-1 group flex items-center justify-between w-full relative">
-                <DropdownMenu>
-                    <DropdownMenuTrigger className="focus:outline-none w-[60%]" asChild>
-                        <button className="text-md font-semibold">
-                            <div className="hover:bg-slate-700/50 rounded-sm flex items-center gap-2 overflow-hidden p-1">
+                <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+                    {!isModalOpen && (
+                        <DropdownMenuTrigger asChild>
+                            <button className="focus:outline-none w-[60%] text-md font-semibold text-left hover:bg-slate-700/50 rounded-sm flex items-center gap-2 overflow-hidden p-1">
                                 <UserAvatar src={profile?.imageUrl} show={true} />
                                 <div className="pr-1 border-white">
                                     <div className="flex flex-col items-start cursor-pointer rounded-md">
@@ -42,15 +55,15 @@ const UserBarClient = ({ profile }: UserBarClientProps) => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </button>
-                    </DropdownMenuTrigger>
-
+                            </button>
+                        </DropdownMenuTrigger>
+                    )}
                     <DropdownMenuPortal>
                         <DropdownMenuContent className="w-72 ml-12 mb-3 bg-[#111214] text-xs font-medium text-black dark:text-neutral-400 space-y-[2px] shadow-lg z-[9999] rounded-lg overflow-hidden">
                             <div className="relative" style={{ height: "105px", minHeight: "105px", backgroundColor: "rgb(236, 68, 68)" }}>
                                 <div className="absolute -bottom-10 left-6 p-2 bg-[#111214] rounded-full">
-                                    <div className="rounded-full">
+                                    <div className="rounded-full relative group cursor-pointer" onClick={handleEditProfileClick}>
+                                        <div className='w-full h-full bg-gray-900 absolute rounded-full z-10 hidden group-hover:opacity-25 group-hover:block' />
                                         <UserAvatar
                                             show={true}
                                             greenDotClassName="w-3 h-3"

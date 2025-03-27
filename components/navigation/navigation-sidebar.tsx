@@ -8,8 +8,6 @@ import { ScrollArea } from "../ui/scroll-area";
 import { NavigationItem } from "./navigation-item";
 import { ModeToggle } from "../mode-toggle";
 import { UserButton } from "@clerk/nextjs";
-import ActionToolkit from "../action-toolkit";
-import { Plus } from "lucide-react";
 import DiscoverButton from "../discover-more/discover-button";
 
 const NavigationSidebar = async () => {

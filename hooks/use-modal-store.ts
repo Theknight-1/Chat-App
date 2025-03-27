@@ -21,6 +21,15 @@ interface ModalData {
   channel?: Channel;
   apiUrl?: string;
   query?: Record<string, any>;
+  profile?: {
+    id: string;
+    userId: string;
+    name: string;
+    imageUrl: string;
+    email: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
 }
 
 interface ModalStore {

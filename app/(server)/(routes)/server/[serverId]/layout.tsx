@@ -29,6 +29,23 @@ const ServerIdLayout = async ({
   });
 
   if (!server) {
+    const publicServer = await db.server.findUnique({
+      where: {
+        id: params.serverId,
+        NOT: {
+          members: {
+            some: {
+              profileId: profile.id
+            }
+          }
+        }
+      },
+    })
+    console.log(publicServer);
+  }
+
+
+  if (!server) {
     return redirect("/");
   }
   return (
