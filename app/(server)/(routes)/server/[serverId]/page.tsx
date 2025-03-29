@@ -1,6 +1,5 @@
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-
 import { RedirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
@@ -15,14 +14,29 @@ const ServerIdPage = async ({ params }: ServerIdPageProps) => {
   if (!profile) {
     return <RedirectToSignIn />;
   }
+
   const server = await db.server.findUnique({
     where: {
       id: params.serverId,
-      members: {
-        some: {
-          profileId: profile.id,
+      OR: [
+        {
+          members: {
+            some: {
+              profileId: profile.id,
+            },
+          },
         },
-      },
+        {
+          AND: [
+            {
+              id: params.serverId,
+            },
+            {
+              public: true,
+            }
+          ]
+        }
+      ]
     },
     include: {
       channels: {
@@ -35,6 +49,10 @@ const ServerIdPage = async ({ params }: ServerIdPageProps) => {
       },
     },
   });
+
+  if (!server) {
+    return redirect("/");
+  }
 
   const initialChannel = server?.channels[0];
 

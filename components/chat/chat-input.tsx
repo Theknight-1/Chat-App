@@ -18,13 +18,14 @@ interface ChatInputProps {
   query: Record<string, any>;
   name: string;
   type: "conversation" | "channel";
+  disabled?: boolean;
 }
 
 const formSchema = z.object({
   content: z.string().min(1),
 });
 
-export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
+export const ChatInput = ({ apiUrl, query, name, type, disabled }: ChatInputProps) => {
   const { onOpen } = useModal();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -65,24 +66,28 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                   <button
                     type="button"
                     onClick={() => onOpen("messageFile", { apiUrl, query })}
-                    className="absolute top-7 left-8 h-[24px] w-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center"
+                    disabled={disabled}
+                    className="absolute top-7 left-8 h-[24px] w-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Plus className="text-white dark:text-[#313338]" />
                   </button>
                   <Input
-                    disabled={isLoading}
-                    className="px-14 py-6 text-md bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
-                    placeholder={`Message ${
-                      type === "conversation" ? name : "#" + name
-                    }`}
+                    disabled={isLoading || disabled}
+                    className="px-14 py-6 text-md bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    placeholder={`Message ${type === "conversation" ? name : "#" + name
+                      }`}
                     {...field}
                   />
                   <div className="absolute top-7 right-8">
-                    <EmojiPicker
-                      onChange={(emoji: string) =>
-                        field.onChange(`${field.value} ${emoji}`)
-                      }
-                    />
+                    {
+                      !disabled && (
+                        <EmojiPicker
+                          onChange={(emoji: string) =>
+                            field.onChange(`${field.value} ${emoji}`)
+                          }
+                        />
+                      )
+                    }
                   </div>
                 </div>
               </FormControl>

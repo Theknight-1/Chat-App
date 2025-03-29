@@ -57,3 +57,39 @@ export async function PATCH(
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+
+export async function GET(
+  req: Request,
+  { params }: { params: { serverId: string } }
+) {
+  try {
+    const profile = await currentProfile();
+
+    if (!profile) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const server = await db.server.findUnique({
+      where: {
+        id: params.serverId,
+        public: true,
+        NOT: {
+          members: {
+            some: {
+              profileId: profile.id,
+            },
+          },
+        },
+      },
+    });
+
+    if (!server) {
+      return new NextResponse("Server not found", { status: 404 });
+    }
+
+    return NextResponse.json(server);
+  } catch (error) {
+    console.log("[SERVER_GET]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}

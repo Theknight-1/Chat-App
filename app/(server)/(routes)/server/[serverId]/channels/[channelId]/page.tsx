@@ -4,9 +4,8 @@ import { ChatMessages } from "@/components/chat/chat-messages";
 import { MediaRoom } from "@/components/media-room";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-
 import { RedirectToSignIn } from "@clerk/nextjs";
-import { ChannelType } from "@prisma/client";
+import { ChannelType, MemberRole } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 interface ChannelIdPageProps {
@@ -29,6 +28,41 @@ const channelIdPage = async ({ params }: ChannelIdPageProps) => {
     },
   });
 
+  if (!channel) {
+    return redirect("/");
+  }
+
+  // Check if user is a member or if server is public
+  const server = await db.server.findUnique({
+    where: {
+      id: params.serverId,
+      OR: [
+        {
+          members: {
+            some: {
+              profileId: profile.id,
+            },
+          },
+        },
+        {
+          AND: [
+            {
+              id: params.serverId,
+            },
+            {
+              public: true,
+            }
+          ]
+        }
+      ]
+    }
+  });
+
+  if (!server) {
+    return redirect("/");
+  }
+
+  // Get member if user is a member (for chat functionality)
   const member = await db.member.findFirst({
     where: {
       serverId: params.serverId,
@@ -36,9 +70,20 @@ const channelIdPage = async ({ params }: ChannelIdPageProps) => {
     },
   });
 
-  if (!channel || !member) {
-    redirect(`/`);
+  // If user is not a member and server is not public, redirect
+  if (!member && !server.public) {
+    return redirect("/");
   }
+
+  // Create a guest member for public server access
+  const guestMember = member || {
+    id: "guest",
+    role: MemberRole.GUEST,
+    profileId: profile.id,
+    serverId: params.serverId,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
@@ -50,7 +95,7 @@ const channelIdPage = async ({ params }: ChannelIdPageProps) => {
       {channel.type === ChannelType.TEXT && (
         <>
           <ChatMessages
-            member={member}
+            member={guestMember}
             name={channel.name}
             chatId={channel.id}
             type="channel"
@@ -71,6 +116,7 @@ const channelIdPage = async ({ params }: ChannelIdPageProps) => {
               channelId: channel.id,
               serverId: channel.serverId,
             }}
+            disabled={!member}
           />
         </>
       )}

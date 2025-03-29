@@ -17,37 +17,36 @@ const ServerIdLayout = async ({
   if (!profile) {
     return <RedirectToSignIn />;
   }
+
   const server = await db.server.findUnique({
     where: {
       id: params.serverId,
-      members: {
-        some: {
-          profileId: profile.id,
+      OR: [
+        {
+          members: {
+            some: {
+              profileId: profile.id,
+            },
+          },
         },
-      },
+        {
+          AND: [
+            {
+              id: params.serverId,
+            },
+            {
+              public: true,
+            }
+          ]
+        }
+      ]
     },
   });
 
   if (!server) {
-    const publicServer = await db.server.findUnique({
-      where: {
-        id: params.serverId,
-        NOT: {
-          members: {
-            some: {
-              profileId: profile.id
-            }
-          }
-        }
-      },
-    })
-    console.log(publicServer);
-  }
-
-
-  if (!server) {
     return redirect("/");
   }
+
   return (
     <div className="h-full">
       <div className="hidden md:flex h-full w-60 z-20 flex-col fixed inset-y-0">
